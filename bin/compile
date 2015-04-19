@@ -43,6 +43,9 @@ arch=$(uname -m|tr A-Z a-z)
 if test $arch = x86_64
 then arch=amd64
 fi
+if test $arch = i386
+then arch=i686
+fi
 plat=$(uname|tr A-Z a-z)-$arch
 
 # Python
@@ -73,7 +76,12 @@ else
     exit 1
 fi
 
-file=${GOFILE:-$ver.$(uname|tr A-Z a-z)-amd64$(platext $ver).tar.gz}
+if test $arch = amd64; then
+	file=${GOFILE:-$ver.$(uname|tr A-Z a-z)-amd64$(platext $ver).tar.gz}
+fi
+if test $arch = i686; then
+	file=${GOFILE:-$ver.$(uname|tr A-Z a-z)-386$(platext $ver).tar.gz}
+fi
 url=${GOURL:-$(urlfor $ver $file)}
 
 if test -e $build/bin && ! test -d $build/bin
